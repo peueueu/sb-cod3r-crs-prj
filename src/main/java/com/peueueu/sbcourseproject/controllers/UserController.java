@@ -2,20 +2,35 @@ package com.peueueu.sbcourseproject.controllers;
 
 import com.peueueu.sbcourseproject.models.User;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
-    @GetMapping("/any")
+    @GetMapping
+    public List<User> getUsers(@RequestParam(name = "id", defaultValue = "1") Integer id) {
+        List<User> users = new ArrayList<>();
+        users.add(new User(1, "John", "Doe"));
+        users.add(new User(2, "Jane", "Doe"));
+        users.add(new User(3, "Janis", "Doe"));
+        users.add(new User(4, "James", "Doe"));
+        users.add(new User(5, "Doris", "Doe"));
+        if(id != null) {
+            return users.stream().filter(u -> u.getId() == id).toList();
+        }
+        return users;
+    }
+
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User getSingleUser() {
-        return new User(2840, "Anders Heljsberg", "123.456.789-00");
+    public User getSingleUser(@PathVariable int id) {
+        return new User(id, "Anders Heljsberg", "123.456.789-00");
     }
 }
