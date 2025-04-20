@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Calc</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .calculator {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        /* Input Fields */
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        /* Buttons */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-operation {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-operation:hover {
+            background-color: #45a049;
+        }
+
+        /* Result */
+        .result {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div class="calculator">
+    <h1>Simple Calculator</h1>
+    <form id="calc-form" method="POST">
+        <div class="input-group">
+            <input type="number" id="num1" placeholder="First number" required>
+            <input type="number" id="num2" placeholder="Second number" required>
+        </div>
+        <div class="buttons">
+            <button type="button" class="btn-operation" data-operation="sum">+</button>
+            <button type="button" class="btn-operation" data-operation="subtract">-</button>
+            <button type="button" class="btn-operation" data-operation="multiply">×</button>
+            <button type="button" class="btn-operation" data-operation="divide">÷</button>
+        </div>
+        <div class="result">
+            <p id="result">Result: </p>
+        </div>
+    </form>
+</div>
+<script>
+    const result = document.getElementById('result')
+    const firstNumber = document.getElementById("num1");
+    const secondNumber = document.getElementById("num2");
+
+    const calcOperations = Array.from(document.querySelectorAll(".buttons .btn-operation"));
+    calcOperations.forEach((btn) => {
+        btn.addEventListener('click', async () => {
+            const data = {
+                firstNumber: parseFloat(firstNumber.value),
+                secondNumber: parseFloat(secondNumber.value)
+            }
+
+            try {
+                console.log(data);
+                const response = await fetch(`/calculator/${btn.dataset.operation}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) throw new Error('API error');
+                const responseData = await response.json();
+                result.innerText = `Result: ${responseData.result}`;
+            } catch (error) {
+                result.innerText = 'Error: ' + error.message;
+            }
+        })
+    })
+
+</script>
+</body>
+</html>
