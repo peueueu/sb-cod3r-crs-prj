@@ -5,9 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class SbCrsPrjApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(SbCrsPrjApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(SbCrsPrjApplication.class, args);
+    }
 }

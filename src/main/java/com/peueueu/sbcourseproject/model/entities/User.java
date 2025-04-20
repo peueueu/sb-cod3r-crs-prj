@@ -1,4 +1,4 @@
-package com.peueueu.sbcourseproject.models;
+package com.peueueu.sbcourseproject.model.entities;
 
 import lombok.Data;
 
